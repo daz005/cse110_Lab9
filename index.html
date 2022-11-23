@@ -102,6 +102,73 @@
 
     // Start your code here
     // You may move this JS to another file if you wish
+       
+    let error_btns = document.querySelector('#error-btns').children;
+    for (var i = 0; i < error_btns.length; i++) 
+    {
+      error_btns[i].onclick = function()
+      {
+        console.log("you clicked the " + this.innerText + " button !");
+        switch (this.innerText)
+        {
+          case "Console Log":
+            
+          break;
+
+          case "Console Error":
+
+          break;
+
+          case "Console Count":
+          break;
+
+          case "Console Warn":
+          break;
+
+          case "Console Assert":
+          break;
+
+          case "Console Clear":
+          break;
+
+          case "Console Dir":
+          break;
+
+          case "Console dirxml":
+          break;
+
+          case "Console Group Start":
+          break;
+
+          case "Console Group End":
+          break;
+
+          case "Console Table":
+          break;
+
+          case "Start Timer":
+          break;
+
+          case "End Timer":
+          break;
+          
+          case "Console Trace":
+          break;
+          
+          case "Trigger a Global Error":
+          break;         
+
+
+          default:
+          break;
+        }
+      };
+    }
+
+    
+
+
+    
   </script>
 </body>
 
