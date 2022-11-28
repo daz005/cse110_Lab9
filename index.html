@@ -6,7 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lab 9</title>
-
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  
   <style>
     button {
       margin: 3px;
@@ -47,6 +48,7 @@
       width: 122px;
     }
   </style>
+  
 </head>
 
 <body>
@@ -84,10 +86,31 @@
       <button>End Timer</button>
       <button>Console Trace</button>
       <button>Trigger a Global Error</button>
+      <img src="image.gif" onerror="myOnErrorFunction()">
     </section>
   </main>
 
   <script>
+  
+  window.TrackJS && TrackJS.install({ 
+      token: "f5204a03b435426188ab1aacaab71a0d"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+    
+
+    function myOnErrorFunction(){
+      TrackJS.track('Demo onerror: The image could not be loaded!');
+      console.error( "Demo onerror: The image could not be loaded!");
+    }
+
+
+    class ValidationError extends Error {
+      constructor(message) {
+        super(message); 
+        this.name = "ValidationError"; 
+      }
+    }
+  
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -95,7 +118,39 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      let result = "";
+
+      try{
+        
+        if( isNaN(firstNum) )
+        {
+          throw new ValidationError("firstNum is not a number!");
+        }
+        else if( isNaN(secondNum ))
+        {
+          throw new ValidationError("secondNum is not a number!");
+        }
+        result = eval(`${firstNum} ${operator} ${secondNum}`);
+      }
+      catch(err){
+        console.group();
+        TrackJS.track(err);
+        console.error(err.message); 
+        console.error(err.name); 
+        console.error(err.stack); 
+        console.groupEnd();
+      }finally{
+        
+        console.group();
+        console.log(firstNum);
+        console.log(operator);
+        console.log(secondNum);
+        console.log(output.innerHTML);
+        console.groupEnd();
+
+        output.innerHTML = result;
+
+      }
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
@@ -112,50 +167,81 @@
         switch (this.innerText)
         {
           case "Console Log":
-            
+            console.log("Console Log Demo!");
           break;
 
           case "Console Error":
-
+            console.error("Console Error Demo!");
           break;
 
           case "Console Count":
+            for (let i = 0; i < 5; i++) {
+                console.count("Console Count Demo");
+            }
           break;
 
           case "Console Warn":
+            console.warn("Console Warn Demo!");
           break;
 
           case "Console Assert":
+            console.assert(3+ 4 == 7, "Console Assert Demo '3+ 4 == 7 is true'");
+            console.assert(3+ 4 != 7, "Console Assert Demo '3+ 4 == 7 is false'");
           break;
 
           case "Console Clear":
+              console.clear();
           break;
 
           case "Console Dir":
+            let dir_demo =  {
+              name: "Console Dir Demo",
+              class: "cse110 lab9",
+            }
+            console.dir(dir_demo);
           break;
 
           case "Console dirxml":
+          let dirxml_demo =  {
+              name: "Console Dirxml Demo",
+              class: "cse110 lab9",
+            }
+            console.dir(dirxml_demo);           
           break;
 
           case "Console Group Start":
+            console.group();
+            console.log("Console Group Start Demo!");
           break;
 
           case "Console Group End":
+            console.groupEnd();
+            console.log("Console Group End Demo!");            
           break;
 
           case "Console Table":
+            console.table(["Console", "Table", "Demo!"]);
           break;
 
           case "Start Timer":
+            console.log("Start Timer Demo!");
+            console.time();             
           break;
 
           case "End Timer":
+              
+            console.timeEnd();
+            console.log("End Timer Demo!");
+
           break;
           
           case "Console Trace":
+            console.trace();
+            console.log("Console Trace Demo!");
           break;
           
           case "Trigger a Global Error":
+            console.error("Trigger a Global Error Demo!");
           break;         
 
 
